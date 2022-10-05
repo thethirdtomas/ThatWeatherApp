@@ -43,15 +43,15 @@ class WeatherViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.first?.coordinate, weatherData == nil {
-            self.getWeatherUsingLocation(location)
+            self.getWeatherUsingLocation(latitude: location.latitude, longitude: location.longitude)
         } else {
             self.loadingState = .loaded
         }
     }
     
-    private func getWeatherUsingLocation(_ location: CLLocationCoordinate2D) {
+    func getWeatherUsingLocation(latitude: Double, longitude: Double) {
         Task {
-            let result = await WeatherAPI.shared.getWeatherUsingLocation(location)
+            let result: Result<WeatherData, NetworkError> = await RequestManager.shared.send(.weather(latitude: latitude, longitude: longitude))
             
             await MainActor.run {
                 switch result {
@@ -64,6 +64,21 @@ class WeatherViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
                 }
             }
             
+        }
+    }
+    
+    func searchForCity(with searchQuery: String) {
+        Task {
+            let result: Result<[City], NetworkError> = await RequestManager.shared.send(.citySearch(for: searchQuery))
+            
+            await MainActor.run {
+                switch result {
+                case .success(let data):
+                    print(data)
+                case .failure(let error):
+                    print(error)
+                }
+            }
         }
     }
  

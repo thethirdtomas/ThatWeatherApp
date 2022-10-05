@@ -17,7 +17,7 @@ struct WeatherView: View {
                 ProgressView()
             default:
                 if let weatherData = viewModel.weatherData {
-                    Text("\(weatherData.name)")
+                    Text("\(weatherData.name), \(weatherData.main.temp)")
                     
                 } else {
                     Text("Search for you city")
@@ -25,6 +25,7 @@ struct WeatherView: View {
             }
         }
         .onAppear {
+            viewModel.searchForCity(with: "London")
             switch viewModel.authorizationStatus {
             case .authorizedAlways, .authorizedWhenInUse:
                 viewModel.requestLocation()
