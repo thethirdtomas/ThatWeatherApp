@@ -9,6 +9,5 @@ import Foundation
 
 
 struct WeatherData: Decodable {
-    let temp: Float
     let name: String
 }

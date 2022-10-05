@@ -12,15 +12,17 @@ struct WeatherView: View {
     
     var body: some View {
         VStack {
-            Text("Weather")
-            
-            if let location = viewModel.location {
-                Text("Your location: \(location.latitude), \(location.longitude)")
-            } else {
-                Text("Search for you city")
+            switch viewModel.loadingState {
+            case .loading:
+                ProgressView()
+            default:
+                if let weatherData = viewModel.weatherData {
+                    Text("\(weatherData.name)")
+                    
+                } else {
+                    Text("Search for you city")
+                }
             }
-            
-            Text("Auth: \(viewModel.authorizationStatus.rawValue)")
         }
         .onAppear {
             switch viewModel.authorizationStatus {

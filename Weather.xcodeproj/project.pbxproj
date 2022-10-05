@@ -16,6 +16,7 @@
 		462CD04428ED034E005384AE /* WeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462CD04328ED034E005384AE /* WeatherView.swift */; };
 		462CD04828ED068F005384AE /* WeatherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462CD04728ED068F005384AE /* WeatherViewModel.swift */; };
 		462CD04E28ED14A6005384AE /* WeatherData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462CD04D28ED14A6005384AE /* WeatherData.swift */; };
+		462CD05028ED15D5005384AE /* WeatherAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462CD04F28ED15D5005384AE /* WeatherAPI.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +49,7 @@
 		462CD04328ED034E005384AE /* WeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherView.swift; sourceTree = "<group>"; };
 		462CD04728ED068F005384AE /* WeatherViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewModel.swift; sourceTree = "<group>"; };
 		462CD04D28ED14A6005384AE /* WeatherData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherData.swift; sourceTree = "<group>"; };
+		462CD04F28ED15D5005384AE /* WeatherAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherAPI.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -161,6 +163,7 @@
 		462CD04628ED0386005384AE /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				462CD04F28ED15D5005384AE /* WeatherAPI.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -297,6 +300,7 @@
 			files = (
 				462CD04428ED034E005384AE /* WeatherView.swift in Sources */,
 				462CD04828ED068F005384AE /* WeatherViewModel.swift in Sources */,
+				462CD05028ED15D5005384AE /* WeatherAPI.swift in Sources */,
 				462CD04E28ED14A6005384AE /* WeatherData.swift in Sources */,
 				462CD01828ED01C2005384AE /* WeatherApp.swift in Sources */,
 			);
