@@ -18,13 +18,16 @@ class SearchViewModel: ObservableObject {
     
     @Published var loadingState: LoadingState = .none
     @Published private(set) var cities: [City] = []
+    private let network: Network
     
-    init() {}
+    init(network: Network = RequestManager.shared) {
+        self.network = network
+    }
     
     func searchForCity(with searchQuery: String) {
         loadingState = .loading
         Task {
-            let result: Result<[City], NetworkError> = await RequestManager.shared.send(.citySearch(for: searchQuery))
+            let result: Result<[City], NetworkError> = await network.send(.citySearch(for: searchQuery))
             
             await MainActor.run {
                 switch result {

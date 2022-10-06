@@ -49,7 +49,6 @@ final class RequestManager: Network {
 
 
 // MARK: - Mock Network Object
-// Used for dependency injection in view previews
 struct MockNetwork: Network {
     func send<T: Decodable>(_ request: Request) async -> Result<T, NetworkError>  {
         return .failure(.unableToComplete)

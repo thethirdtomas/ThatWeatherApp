@@ -22,10 +22,12 @@ class WeatherViewModel: ObservableObject {
     
     @Published var weatherData: WeatherData?
     @Published var loadingState: loadingState = .loaded
+    let network: Network
     
-    init(latitude: Double, longitude: Double) {
+    init(latitude: Double, longitude: Double, network: Network = RequestManager.shared) {
         self.latitude = latitude
         self.longitude = longitude
+        self.network = network
     }
     
     func getWeather() {

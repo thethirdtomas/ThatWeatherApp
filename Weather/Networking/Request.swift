@@ -22,7 +22,7 @@ enum APIService {
     var apiKey: String {
         switch self {
         case .openWeatherMap:
-            return "164d59a36ff8cfa92e3598547878597f"
+            return AppEnvironment.getSecretValueFor(key: "openweathermap") as String? ?? ""
         }
     }
 }
