@@ -8,36 +8,30 @@
 import SwiftUI
 
 struct WeatherView: View {
-    @StateObject var viewModel = WeatherViewModel()
+    @StateObject var viewModel: WeatherViewModel
     
     var body: some View {
         VStack {
             switch viewModel.loadingState {
             case .loading:
                 ProgressView()
-            default:
+            case .failed:
+                Text("Couldn't load weather data.")
+                    .font(.title2)
+            case .loaded:
                 if let weatherData = viewModel.weatherData {
-                    Text("\(weatherData.name), \(weatherData.main.temp)")
-                    
-                } else {
-                    Text("Search for you city")
+                    VStack {
+                        Text(weatherData.name)
+                            .font(.largeTitle)
+                        Text("Temperature: \(viewModel.temperature)")
+                            .font(.title)
+                        Text("min: \(viewModel.minTemperature), max:\(viewModel.maxTemperature)")
+                    }
                 }
             }
         }
         .onAppear {
-            viewModel.searchForCity(with: "London")
-            switch viewModel.authorizationStatus {
-            case .authorizedAlways, .authorizedWhenInUse:
-                viewModel.requestLocation()
-            default:
-                viewModel.requestLocationPermission()
-            }
+            viewModel.getWeather()
         }
-    }
-}
-
-struct WeatherView_Previews: PreviewProvider {
-    static var previews: some View {
-        WeatherView()
     }
 }

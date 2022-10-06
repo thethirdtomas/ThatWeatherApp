@@ -9,7 +9,10 @@ import Foundation
 import CoreLocation
 
 
-class WeatherViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
+class WeatherViewModel: ObservableObject {
+    
+    let latitude: Double
+    let longitude: Double
     
     enum loadingState {
         case failed
@@ -17,39 +20,16 @@ class WeatherViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
         case loading
     }
     
-    
-    @Published var authorizationStatus: CLAuthorizationStatus
     @Published var weatherData: WeatherData?
     @Published var loadingState: loadingState = .loaded
     
-    private let locationManager: CLLocationManager
-    
-    override init() {
-        locationManager = CLLocationManager()
-        authorizationStatus = locationManager.authorizationStatus
-        
-        super.init()
-        locationManager.delegate = self
+    init(latitude: Double, longitude: Double) {
+        self.latitude = latitude
+        self.longitude = longitude
     }
     
-    func requestLocationPermission() {
-        locationManager.requestWhenInUseAuthorization()
-    }
-    
-    func requestLocation() {
+    func getWeather() {
         self.loadingState = .loading
-        locationManager.requestLocation()
-    }
-
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let location = locations.first?.coordinate, weatherData == nil {
-            self.getWeatherUsingLocation(latitude: location.latitude, longitude: location.longitude)
-        } else {
-            self.loadingState = .loaded
-        }
-    }
-    
-    func getWeatherUsingLocation(latitude: Double, longitude: Double) {
         Task {
             let result: Result<WeatherData, NetworkError> = await RequestManager.shared.send(.weather(latitude: latitude, longitude: longitude))
             
@@ -81,16 +61,20 @@ class WeatherViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
             }
         }
     }
- 
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        authorizationStatus = status
-        
-        if authorizationStatus == .authorizedWhenInUse || authorizationStatus == .authorizedAlways {
-            self.requestLocation()
-        }
+}
+
+// MARK: - Display
+extension WeatherViewModel {
+    var temperature: String {
+        "\(round(weatherData?.main.temp ?? 0))"
     }
     
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print(error)
+    var minTemperature: String {
+        "\(round(weatherData?.main.temp_min ?? 0))"
     }
+    
+    var maxTemperature: String {
+        "\(round(weatherData?.main.temp_max ?? 0))"
+    }
+    
 }

@@ -15,4 +15,6 @@ struct WeatherData: Decodable {
 
 struct Weather: Decodable {
     let temp: Float
+    let temp_min: Float
+    let temp_max: Float
 }
