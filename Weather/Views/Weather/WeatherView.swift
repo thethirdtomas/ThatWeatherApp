@@ -30,8 +30,8 @@ struct WeatherView: View {
                 }
             }
         }
-        .onAppear {
-            viewModel.getWeather()
+        .task {
+            await viewModel.getWeather()
         }
     }
 }

@@ -8,7 +8,7 @@
 import Foundation
 
 class SearchViewModel: ObservableObject {
-    enum LoadingState {
+    enum LoadingState: Equatable {
         case none
         case failed
         case loaded
@@ -24,25 +24,23 @@ class SearchViewModel: ObservableObject {
         self.network = network
     }
     
-    func searchForCity(with searchQuery: String) {
+    func searchForCity(with searchQuery: String) async {
         loadingState = .loading
-        Task {
-            let result: Result<[City], NetworkError> = await network.send(.citySearch(for: searchQuery))
-            
-            await MainActor.run {
-                switch result {
-                case .success(let data):
-                    if data.isEmpty {
-                        self.loadingState = .empty(searchQuery)
-                    } else {
-                        self.cities = data
-                        self.loadingState = .loaded
-                    }
-                    
-                case .failure(let error):
-                    print(error)
-                    self.loadingState = .failed
+        let result: Result<[City], NetworkError> = await network.send(.citySearch(for: searchQuery))
+        
+        await MainActor.run {
+            switch result {
+            case .success(let data):
+                if data.isEmpty {
+                    self.loadingState = .empty(searchQuery)
+                } else {
+                    self.cities = data
+                    self.loadingState = .loaded
                 }
+                
+            case .failure(let error):
+                print(error)
+                self.loadingState = .failed
             }
         }
     }

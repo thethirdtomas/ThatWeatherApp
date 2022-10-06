@@ -50,8 +50,20 @@ final class RequestManager: Network {
 
 // MARK: - Mock Network Object
 struct MockNetwork: Network {
+    let mockError: NetworkError?
+    let mockResult: Any?
+    
+    init(mockError: NetworkError? = nil, mockResult: Any? = nil ) {
+        self.mockError = mockError
+        self.mockResult = mockResult
+    }
+    
     func send<T: Decodable>(_ request: Request) async -> Result<T, NetworkError>  {
-        return .failure(.unableToComplete)
+        if let mockError = mockError {
+            return .failure(mockError)
+        } else {
+            return .success(mockResult as! T)
+        }
     }
 }
 

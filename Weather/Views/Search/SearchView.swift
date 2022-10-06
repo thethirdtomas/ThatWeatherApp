@@ -79,7 +79,9 @@ struct SearchView: View {
             TextField("Search city", text: $searchQuery)
                 .onSubmit {
                     if !searchQuery.isEmpty {
-                        viewModel.searchForCity(with: searchQuery)
+                        Task {
+                            await viewModel.searchForCity(with: searchQuery)
+                        }
                     }
                 }
                 .focused($searchFocus)

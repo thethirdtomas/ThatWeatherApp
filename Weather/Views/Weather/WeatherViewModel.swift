@@ -24,42 +24,24 @@ class WeatherViewModel: ObservableObject {
     @Published var loadingState: loadingState = .loaded
     let network: Network
     
-    init(latitude: Double, longitude: Double, network: Network = RequestManager.shared) {
+    init(latitude: Double = 0.0, longitude: Double = 0.0, network: Network = RequestManager.shared) {
         self.latitude = latitude
         self.longitude = longitude
         self.network = network
     }
     
-    func getWeather() {
+    func getWeather() async {
         self.loadingState = .loading
-        Task {
-            let result: Result<WeatherData, NetworkError> = await RequestManager.shared.send(.weather(latitude: latitude, longitude: longitude))
-            
-            await MainActor.run {
-                switch result {
-                case .success(let data):
-                    self.weatherData = data
-                    self.loadingState = .loaded
-                case .failure(let error):
-                    print(error)
-                    self.loadingState = .failed
-                }
-            }
-            
-        }
-    }
-    
-    func searchForCity(with searchQuery: String) {
-        Task {
-            let result: Result<[City], NetworkError> = await RequestManager.shared.send(.citySearch(for: searchQuery))
-            
-            await MainActor.run {
-                switch result {
-                case .success(let data):
-                    print(data)
-                case .failure(let error):
-                    print(error)
-                }
+        let result: Result<WeatherData, NetworkError> = await network.send(.weather(latitude: latitude, longitude: longitude))
+        
+        await MainActor.run {
+            switch result {
+            case .success(let data):
+                self.weatherData = data
+                self.loadingState = .loaded
+            case .failure(let error):
+                print(error)
+                self.loadingState = .failed
             }
         }
     }
