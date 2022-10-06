@@ -29,9 +29,15 @@ class WeatherViewModel: ObservableObject {
         self.longitude = longitude
         self.network = network
     }
-    
+}
+
+// MARK: - Network
+extension WeatherViewModel {
     func getWeather() async {
-        self.loadingState = .loading
+        await MainActor.run {
+            self.loadingState = .loading
+        }
+       
         let result: Result<WeatherData, NetworkError> = await network.send(.weather(latitude: latitude, longitude: longitude))
         
         await MainActor.run {

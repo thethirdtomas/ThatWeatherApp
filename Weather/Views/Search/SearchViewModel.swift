@@ -23,9 +23,22 @@ class SearchViewModel: ObservableObject {
     init(network: Network = RequestManager.shared) {
         self.network = network
     }
-    
+}
+
+// MARK: - Action
+extension SearchViewModel {
+    func clearCities() {
+        cities.removeAll()
+    }
+}
+
+// MARK: - Network
+extension SearchViewModel {
     func searchForCity(with searchQuery: String) async {
-        loadingState = .loading
+        await MainActor.run {
+            loadingState = .loading
+        }
+
         let result: Result<[City], NetworkError> = await network.send(.citySearch(for: searchQuery))
         
         await MainActor.run {
@@ -43,9 +56,5 @@ class SearchViewModel: ObservableObject {
                 self.loadingState = .failed
             }
         }
-    }
-    
-    func clearCities() {
-        cities.removeAll()
     }
 }
