@@ -1,5 +1,7 @@
 # ThatWeatherApp
 
+- Developed and tested on Xcode 14, with iOS 16
+
 ## Get started
 ### Get yourself an API key
 - This app requires an api key from [open weather map](https://openweathermap.org)
